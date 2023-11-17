@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASIN Position Scraping App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+            background-color: #f2f2f2;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 200px;
+            margin-right: 10px;
+        }
+
+        input[type="submit"] {
+            background-color: #3498db;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #2779b5;
+        }
+
+        p {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        #result {
+            display: none /* Oculta a div por padrão */;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #3498db;
+            background-color: #fff;
+            border-radius: 5px;
+            max-width: 400px /* Largura reduzida */;
+        }
+
+        #result p {
+            color: #3498db;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <form id="scrapingForm">
+        <input type="text" placeholder="Enter keyword" name="keyword" id="keyword">
+        <input type="text" placeholder="Enter ASIN" name="asin" id="asin">
+        <input type="submit" value="Send" id="Search">
+    </form>
+    <p>Note: The results may vary and are not 100% reliable.</p>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('scrapingForm').addEventListener('submit', function (event) {
+            event.preventDefault()
+            const keyword = document.getElementById('keyword').value
+            const asin = document.getElementById('asin').value
+
+            fetch(`/api/scraper?keyword=${keyword}&asin=${asin}`)
+                .then(response => response.json())
+                .then(data => {
+                    const resultDiv = document.getElementById('result')
+                    resultDiv.innerHTML = '' // Limpa o conteúdo anterior
+
+                    if (data.targetIndex !== undefined) {
+                        resultDiv.style.display = 'block' // Mostra a div apenas se houver resultado
+                        resultDiv.innerHTML = `<p>The product with the ASIN ${asin} is in the ${data.targetIndex} position</p>`
+                    } else {
+                        resultDiv.style.display = 'none' // Oculta a div se não houver resultado
+                        resultDiv.innerHTML = `<p>The product with the ASIN ${asin} wasn't found in the pages 1 to 5</p>`
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro na chamada AJAX', error)
+                })
+        })
+    </script>
+</body>
+
+</html>
