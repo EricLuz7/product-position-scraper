@@ -47,13 +47,13 @@
         }
 
         #result {
-            display: none /* Oculta a div por padrão */;
+            display: none;
             margin: 20px auto;
             padding: 20px;
             border: 1px solid #3498db;
             background-color: #fff;
             border-radius: 5px;
-            max-width: 400px /* Largura reduzida */;
+            max-width: 400px;
         }
 
         #result p {
@@ -82,13 +82,13 @@
                 .then(response => response.json())
                 .then(data => {
                     const resultDiv = document.getElementById('result')
-                    resultDiv.innerHTML = '' // Limpa o conteúdo anterior
+                    resultDiv.innerHTML = '' 
 
                     if (data.targetIndex !== undefined) {
-                        resultDiv.style.display = 'block' // Mostra a div apenas se houver resultado
+                        resultDiv.style.display = 'block' 
                         resultDiv.innerHTML = `<p>The product with the ASIN ${asin} is in the ${data.targetIndex} position</p>`
                     } else {
-                        resultDiv.style.display = 'none' // Oculta a div se não houver resultado
+                        resultDiv.style.display = 'none' 
                         resultDiv.innerHTML = `<p>The product with the ASIN ${asin} wasn't found in the pages 1 to 5</p>`
                     }
                 })
